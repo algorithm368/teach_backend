@@ -122,33 +122,28 @@ app.post('/insert', async (req, res) => {
     });
 });
 
+// http://localhost:8000/update?column=id&value=1
 app.put('/update', async (req, res) => {
     const column = req.query.column;
     const value = req.query.value;
 
-    const student_data = req.body;
+    const update_data = req.body;
 
-    // Validate column and value query parameters
     if (!column || !value) {
         return res.status(400).send('Column and value query parameters are required');
     }
 
-    // Validate student_data is provided and not empty
-    if (!student_data || Object.keys(student_data).length === 0) {
+    if (!update_data || Object.keys(update_data).length === 0) {
         return res.status(400).json({
             message: "No student data provided to update"
         });
     }
 
-    // Create the values array for the SQL query
-    const values = [...Object.values(student_data), value];
-    // Create the SET clause for the SQL update query
-    const setClause = Object.keys(student_data).map(key => `${key} = ?`).join(', ');
-    // Construct the SQL update query
-    const query = `UPDATE ${table} SET ${setClause} WHERE ${column} = ?`;
+    const values = [...Object.values(update_data), value]
+    const setClause = Object.keys(update_data).map(key => `${key} = ?`).join(', ');
+    const query = `UPDATE ${table} SET ${setClause} WHERE ${column} = ?`
 
-    // Execute the SQL query
-    connection.query(query, values, (err, results) => {
+    connection.query(query, values, (err, result) => {
         if (err) {
             return res.status(500).json({
                 message: 'Database updation failed', err
@@ -157,11 +152,10 @@ app.put('/update', async (req, res) => {
 
         res.status(200).json({
             message: 'Student data updated successfully',
-            affectedRows: results.affectedRows
+            affctedRows: result.affctedRows
         });
     });
 });
-
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

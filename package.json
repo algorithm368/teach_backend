@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "install:prod": "npm install --omit=dev",
     "dev": "nodemon server.js",
     "start": "nodemon server.js"
   },
